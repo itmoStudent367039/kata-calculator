@@ -1,33 +1,45 @@
 package calculator;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Objects;
 
 class Context {
-    static HashMap<String, Integer> numbers;
-    static final List<String> ARAB = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-    static final List<String> ROME = List.of("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "L", "C", "M", "D");
+    static HashMap<String, Integer> arab;
+    static HashMap<String, Integer> rome;
+    HashMap<String, Expression> expressions;
 
     public Context() {
-        numbers = new HashMap<>();
+        expressions = new HashMap<>() {{
+            put("*", new MultiplyExpression());
+            put("/", new DivideExpression());
+            put("+", new AddExpression());
+            put("-", new SubtractExpression());
+        }};
+        arab = new HashMap<>() {{
+            put("1", 1);
+            put("2", 2);
+            put("3", 3);
+            put("4", 4);
+            put("5", 5);
+            put("6", 6);
+            put("7", 7);
+            put("8", 8);
+            put("9", 9);
+            put("10", 10);
+        }};
 
-        for (String s : ARAB) {
-            numbers.put(s, Integer.parseInt(s));
-        }
-
-        for (int i = 0; i < ROME.size(); i++) {
-
-            if (!ROME.get(i).equals("X")) {
-                numbers.put(ROME.get(i), i + 1);
-            } else {
-                break;
-            }
-
-        }
-        numbers.put("L", 50);
-        numbers.put("C", 100);
-        numbers.put("M", 1000);
-        numbers.put("D", 500);
+        rome = new HashMap<>() {{
+            put("I", 1);
+            put("II", 2);
+            put("III", 3);
+            put("IV", 4);
+            put("V", 5);
+            put("VI", 6);
+            put("VII", 7);
+            put("VIII", 8);
+            put("IX", 9);
+            put("X", 10);
+        }};
 
     }
 
@@ -41,30 +53,18 @@ class Context {
         Number left = new Number(strings[0]);
         Number right = new Number(strings[2]);
         String l = strings[1];
-        Expression action = null;
+        Expression action = expressions.get(l);
 
-        if (ARAB.contains(left.sign) && ROME.contains(right.sign) || ARAB.contains(right.sign) && ROME.contains(left.sign)) {
+        if (Objects.isNull(action)) {
             throw new IllegalArgumentException();
         }
 
-        switch (l) {
-            case "*":
-                action = new MultiplyExpression(left, right);
-                break;
-            case "/":
-                action = new DivideExpression(left, right);
-                break;
-            case "-":
-                action = new SubtractExpression(left, right);
-                break;
-            case "+":
-                action = new AddExpression(left, right);
-                break;
-            default:
-                throw new IllegalArgumentException();
+        if (arab.containsKey(left.sign) && rome.containsKey(right.sign) || arab.containsKey(right.sign) && rome.containsKey(left.sign)) {
+            throw new IllegalArgumentException();
         }
 
-        Number number = action.interpret();
+
+        Number number = action.interpret(left, right);
         number.updateSign();
 
         return number;

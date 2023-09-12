@@ -8,10 +8,10 @@ class Number {
     String sign;
 
     public Number(String value) throws IllegalArgumentException {
-        if (ARAB.contains(value)) {
+        if (arab.containsKey(value)) {
             this.value = Long.parseLong(value);
-        } else if (ROME.contains(value)) {
-            this.value = numbers.get(value);
+        } else if (rome.containsKey(value)) {
+            this.value = rome.get(value);
         } else {
             throw new IllegalArgumentException();
         }
@@ -28,7 +28,7 @@ class Number {
 
     void updateSign() {
 
-        if (ARAB.contains(sign)) {
+        if (arab.containsKey(sign)) {
 
             sign = String.valueOf(value);
 
