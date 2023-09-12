@@ -12,6 +12,7 @@ public class Main {
                 System.out.println(calc(reader.readLine()));
             } catch (IllegalArgumentException e) {
                 System.out.println("throws Exception");
+                System.exit(-1);
             }
         }
     }
