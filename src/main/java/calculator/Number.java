@@ -4,12 +4,12 @@ package calculator;
 import static calculator.Context.*;
 
 class Number {
-    long value;
+    int value;
     String sign;
 
     public Number(String value) throws IllegalArgumentException {
         if (arab.containsKey(value)) {
-            this.value = Long.parseLong(value);
+            this.value = Short.parseShort(value);
         } else if (rome.containsKey(value)) {
             this.value = rome.get(value);
         } else {
@@ -18,11 +18,11 @@ class Number {
         this.sign = value;
     }
 
-    public void setValue(long value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
-    public long getValue() {
+    public int getValue() {
         return value;
     }
 
@@ -42,7 +42,7 @@ class Number {
         }
 
     }
-    String toRoman(long num) {
+    String toRoman(int num) {
 
         int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
         String[] romanNumerals = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
